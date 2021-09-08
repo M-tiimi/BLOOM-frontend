@@ -6,6 +6,7 @@ export default function Flower() {
   return (
     <View style={styles.container}>
       <Text>Grow your flower!</Text>
+      <Text>Ansku</Text>
       <StatusBar style="auto" />
     </View>
   );
