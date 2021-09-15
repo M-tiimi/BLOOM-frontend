@@ -30,16 +30,15 @@ export default function Flower() {
     }
   );
 
-  const buttonPressed = () => {
-    setPoints(points +2)
-    if (points >= 6 && points <= 10) {
+  const buttonPressed = () => { 
+    const sum = points + 2;
+    setPoints(sum);
+    if (sum >= 6 && sum <= 10) {
       setFlowerImg(images.image2)
     }
-    else if (points > 10) {
+    else if (sum > 10) {
       setFlowerImg(images.image1)
     }
-    
-
   }
 
   return (
