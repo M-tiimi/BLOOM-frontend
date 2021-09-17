@@ -1,7 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import Flower from './Flower';
-import Information from './Information';
+import Flower from './components/Flower';
+import Information from './components/Information';
 import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer} from '@react-navigation/native';
 import { createBottomTabNavigator} from '@react-navigation/bottom-tabs';
