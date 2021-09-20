@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, Alert} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, Image, Alert} from 'react-native';
 import { Button } from 'react-native-elements';
 import images from '../Image';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
@@ -8,7 +8,7 @@ export default function Flower() {
 
   const [points, setPoints] = useState(0);
   const [flowerImg, setFlowerImg] = useState(images.image3); 
-
+  const [input, setInput] = useState('');
 
   const getFlowers = () => {
     fetch(`http://192.168.100.2:8000/flowers`)
@@ -22,28 +22,33 @@ export default function Flower() {
       });
   };
 
-
-
-
-  const showAlert = () =>
-  Alert.alert(
-    "Alert Title",
-    "Mitä kuuluu?",
-    [
-      {
-        text: "Cancel",
-        onPress: () => Alert.alert("Cancel Pressed"),
-        style: "cancel",
-      },
-    ],
-    {
-      cancelable: true,
-      onDismiss: () =>
-        Alert.alert(
-          "This alert was dismissed by tapping outside of the alert dialog."
-        ),
+  useEffect(() => {
+    var hours = new Date().getHours();
+    if (hours <= 23 && hours >= 16){
+      showAlert();
+    } else {
+      console.log("Not the time yet")
     }
-  );
+  }, []);
+
+ const showAlert = () => {
+    Alert.prompt(
+      "",
+      "How are you doing today?",
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        {
+          text: "Submit",
+          onPress: input => setInput(input)
+        }
+      ],
+      "plain-text"
+    );
+  };
 
   const buttonPressed = () => { 
     const sum = points + 2;
@@ -55,13 +60,12 @@ export default function Flower() {
       setFlowerImg(images.image1)
     }
   }
-
+  
   return (
-    
-    <View style={styles.container}>
+    <ScrollView style={{ backgroundColor: 'white', marginHorizontal: 20 }}>
       <View style={styles.container}>
-        <Button title='Flowers' onPress={getFlowers} />
-        <Button title="Show alert" onPress={showAlert} />
+        <Button title="Show alert" style={{padding: 10}} onPress={showAlert} />
+        <Button title='Flowers' style={{padding: 10}} onPress={getFlowers} />
         <Text>Make your flower bloom!</Text>
         <Text>Points: {points}</Text>
       </View>
@@ -100,7 +104,8 @@ export default function Flower() {
               />
             }
           />
-      </View><View style={styles.buttonContainer}>
+      </View>
+      <View style={styles.buttonContainer}>
           <Text>Slept well</Text>
           <Button onPress={buttonPressed}
             icon={
@@ -111,7 +116,8 @@ export default function Flower() {
               />
             }
           />
-      </View><View style={styles.buttonContainer}>
+      </View>
+      <View style={styles.buttonContainer}>
           <Text>Did something that made me happy</Text>
           <Button onPress={buttonPressed}
             icon={
@@ -129,7 +135,7 @@ export default function Flower() {
               source = {flowerImg} 
             />
          
-    </View>
+    </ScrollView>
   );
 }
 
@@ -143,15 +149,19 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     flex: 1,
+    padding: 10,
     flexDirection: 'row',
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
   },
   imageContainer: {
-    width: '40%',
-    height: '40%',
+    width: '90%',
+    height: '90%',
     resizeMode: 'contain',
     backgroundColor: 'transparent',
+    justifyContent: 'center',
   },
 });
+
+// 'rgba(255, 0, 0, 0.5)'
