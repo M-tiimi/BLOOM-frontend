@@ -10,6 +10,21 @@ export default function Flower() {
   const [flowerImg, setFlowerImg] = useState(images.image3); 
 
 
+  const getFlowers = () => {
+    fetch(`http://192.168.100.2:8000/flowers`)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        console.log(responseJson);
+       
+      })
+      .catch((error) => {
+        console.log("Error", error);
+      });
+  };
+
+
+
+
   const showAlert = () =>
   Alert.alert(
     "Alert Title",
@@ -45,6 +60,7 @@ export default function Flower() {
     
     <View style={styles.container}>
       <View style={styles.container}>
+        <Button title='Flowers' onPress={getFlowers} />
         <Button title="Show alert" onPress={showAlert} />
         <Text>Make your flower bloom!</Text>
         <Text>Points: {points}</Text>
