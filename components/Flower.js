@@ -10,16 +10,16 @@ export default function Flower() {
   const [flowerImg, setFlowerImg] = useState(images.image3); 
   const [input, setInput] = useState('');
   const [question, setQuestion] = useState('');
-
-  useEffect(() => {
-    fetchQuestion();
-  }, []);
+ 
+  //useEffect(() => {
+  //  fetchQuestion();
+ // }, []);
 
 
   const fetchQuestion = () => {
-    fetch('')
+    fetch('http://192.168.100.2:8000/questions')
       .then(response => response.json())
-      .then(data => setQuestion(data))
+      .then(data => setQuestion(data[0].title))
       .catch(err => console.error(err))
     console.log(question)
   }
@@ -84,7 +84,7 @@ export default function Flower() {
     <ScrollView style={{ backgroundColor: 'white', marginHorizontal: 20 }}>
       <View style={styles.container}>
         <Button title="Show alert" style={{padding: 10}} onPress={showAlert} />
-        <Button title='Flowers' style={{padding: 10}} onPress={getFlowers} />
+        <Button title='Flowers' style={{padding: 10}} onPress={fetchQuestion} />
         <Text>Make your flower bloom!</Text>
         <Text>Points: {points}</Text>
       </View>
