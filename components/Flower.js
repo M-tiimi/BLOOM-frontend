@@ -9,6 +9,25 @@ export default function Flower() {
   const [points, setPoints] = useState(0);
   const [flowerImg, setFlowerImg] = useState(images.image3); 
   const [input, setInput] = useState('');
+  const [question, setQuestion] = useState('');
+
+  useEffect(() => {
+    fetchQuestion();
+  }, []);
+
+
+  const fetchQuestion = () => {
+    fetch('')
+      .then(response => response.json())
+      .then(data => setQuestion(data))
+      .catch(err => console.error(err))
+    console.log(question)
+  }
+
+  const submitAnswer = () => {
+    input = setInput(input)
+
+  }
 
   const getFlowers = () => {
     fetch(`http://192.168.100.2:8000/flowers`)
@@ -34,7 +53,7 @@ export default function Flower() {
  const showAlert = () => {
     Alert.prompt(
       "",
-      "How are you doing today?",
+      `${question}`,
       [
         {
           text: "Cancel",
@@ -43,7 +62,7 @@ export default function Flower() {
         },
         {
           text: "Submit",
-          onPress: input => setInput(input)
+          onPress: {submitAnswer} 
         }
       ],
       "plain-text"
