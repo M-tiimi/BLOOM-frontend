@@ -11,13 +11,13 @@ export default function Flower() {
   const [input, setInput] = useState('');
   const [question, setQuestion] = useState('');
  
-  //useEffect(() => {
-  //  fetchQuestion();
- // }, []);
-
+  useEffect(() => {
+    fetchQuestion();
+    timing();
+  }, []);
 
   const fetchQuestion = () => {
-    fetch('http://192.168.100.2:8000/questions')
+    fetch(`http://192.168.0.102:8000/questions/`)
       .then(response => response.json())
       .then(data => setQuestion(data[0].title))
       .catch(err => console.error(err))
@@ -29,26 +29,14 @@ export default function Flower() {
 
   }
 
-  const getFlowers = () => {
-    fetch(`http://192.168.100.2:8000/flowers`)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log(responseJson);
-       
-      })
-      .catch((error) => {
-        console.log("Error", error);
-      });
-  };
-
-  useEffect(() => {
+ const timing = () => {
     var hours = new Date().getHours();
-    if (hours <= 23 && hours >= 16){
+    if (hours <= 23 && hours >= 11){
       showAlert();
     } else {
       console.log("Not the time yet")
     }
-  }, []);
+  }
 
  const showAlert = () => {
     Alert.prompt(
@@ -84,9 +72,9 @@ export default function Flower() {
     <ScrollView style={{ backgroundColor: 'white', marginHorizontal: 20 }}>
       <View style={styles.container}>
         <Button title="Show alert" style={{padding: 10}} onPress={showAlert} />
-        <Button title='Flowers' style={{padding: 10}} onPress={fetchQuestion} />
         <Text>Make your flower bloom!</Text>
         <Text>Points: {points}</Text>
+        <Text>{question}</Text>
       </View>
       <View style={styles.buttonContainer}>
         <Text>Ate a proper meal</Text>
