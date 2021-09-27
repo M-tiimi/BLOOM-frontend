@@ -4,44 +4,65 @@ import { Button } from 'react-native-elements';
 import images from '../Image';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 
+
 export default function Flower() {
 
   const [points, setPoints] = useState(0);
   const [flowerImg, setFlowerImg] = useState(images.image3); 
-  const [input, setInput] = useState('');
   const [question, setQuestion] = useState('');
+  const [answer, setAnswer] = useState('');
  
-  useEffect(() => {
-    fetchQuestion();
-    timing();
-  }, []);
+ 
 
   const fetchQuestion = () => {
-    fetch(`http://192.168.0.102:8000/questions/`)
+    fetch(`http://192.168.100.3:8000/questions/`)
       .then(response => response.json())
       .then(data => setQuestion(data[0].title))
       .catch(err => console.error(err))
-    console.log(question)
+   
   }
 
-  const submitAnswer = () => {
-    input = setInput(input)
+  
+ 
+  const postData = () => {
+  
+    const a = {title: answer}
+    console.log(a)
+    fetch('http://192.168.100.3:8000/answers/',
+      {
+        method: 'POST',
+        body: JSON.stringify(a),
+        headers: { 'Content-type': 'application/json' }
+      })
+      .then(response => {
+        if (response.ok) {
+          console.log('Success: Data sent')
+        }
+        else {
+          console.log('Error: Data sending failed')
+        }
+      })
+      .catch(err => console.error(err))
+    }
 
-  }
+  
+ useEffect( () => {
 
- const timing = () => {
-    var hours = new Date().getHours();
+  var hours = new Date().getHours()
     if (hours <= 23 && hours >= 11){
+    
       showAlert();
     } else {
       console.log("Not the time yet")
     }
-  }
+
+  }, []);
+
 
  const showAlert = () => {
     Alert.prompt(
-      "",
       `${question}`,
+      '',
       [
         {
           text: "Cancel",
@@ -50,11 +71,13 @@ export default function Flower() {
         },
         {
           text: "Submit",
-          onPress: {submitAnswer} 
+          onPress: answer => setAnswer(answer)
         }
       ],
-      "plain-text"
+      'plain-text'
     );
+
+ 
   };
 
   const buttonPressed = () => { 
@@ -67,14 +90,20 @@ export default function Flower() {
       setFlowerImg(images.image1)
     }
   }
+
+  useEffect(() => {
+    fetchQuestion();
+  }, []);
+  
   
   return (
     <ScrollView style={{ backgroundColor: 'white', marginHorizontal: 20 }}>
       <View style={styles.container}>
         <Button title="Show alert" style={{padding: 10}} onPress={showAlert} />
+        <Button title='sendAnswer' onPress={postData}> </Button>
         <Text>Make your flower bloom!</Text>
         <Text>Points: {points}</Text>
-        <Text>{question}</Text>
+        <Text>{question} {answer}</Text>
       </View>
       <View style={styles.buttonContainer}>
         <Text>Ate a proper meal</Text>
