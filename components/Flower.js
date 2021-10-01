@@ -7,27 +7,19 @@ import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 
 export default function Flower() {
 
+let hour = new Date().getHours();
+
   const [points, setPoints] = useState(0);
   const [flowerImg, setFlowerImg] = useState(images.image3); 
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
- 
- 
+  const [hours, setHours] = useState(hour); 
 
-  const fetchQuestion = () => {
-    fetch(`http://192.168.100.3:8000/questions/`)
-      .then(response => response.json())
-      .then(data => setQuestion(data[0].title))
-      .catch(err => console.error(err))
-   
-  }
 
-  
- 
-  const postData = () => {
-  
-    const a = {title: answer}
-    console.log(a)
+  //vvoi lahettaa answerissa olevaa tietoa buttonin avulla
+  const postData = (ab) => {
+    const a = {title: ab}
+    console.log(ab)
     fetch('http://192.168.100.3:8000/answers/',
       {
         method: 'POST',
@@ -45,40 +37,49 @@ export default function Flower() {
       .catch(err => console.error(err))
     }
 
+    //useEffectin sisassa kysymysten haku, alertin teko ja sen kutsuminen seka vastauksen lahettaminen tai cancel
+    
   
  useEffect( () => {
+  fetch(`http://192.168.100.3:8000/questions/`)
+      .then(response => response.json())
+      .then(data =>{
+         setQuestion(data[0].title) 
 
-  var hours = new Date().getHours()
-    if (hours <= 23 && hours >= 11){
-    
-      showAlert();
-    } else {
-      console.log("Not the time yet")
-    }
-
+        const showAlert = () => {
+          Alert.prompt(
+            data[0].title,
+            '',
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              {
+                text: "Submit",
+                onPress: (ab) => { 
+                  setAnswer(ab);
+                  postData(ab);
+                }
+              }
+            ],
+            'plain-text'
+          );
+      
+        };
+        if (hours <= 23 && hours >= 11 ){
+          showAlert();
+        } else {
+          console.log("Not the time yet")
+        }
+      })
+      .catch((e) => console.log(e))
+ 
   }, []);
 
 
- const showAlert = () => {
-    Alert.prompt(
-      `${question}`,
-      '',
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        {
-          text: "Submit",
-          onPress: answer => setAnswer(answer)
-        }
-      ],
-      'plain-text'
-    );
 
- 
-  };
 
   const buttonPressed = () => { 
     const sum = points + 2;
@@ -91,19 +92,48 @@ export default function Flower() {
     }
   }
 
-  useEffect(() => {
-    fetchQuestion();
-  }, []);
+ 
+  const showA = () => {
+    Alert.prompt(
+      question,
+      '',
+      [
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel"
+        },
+        {
+          text: "Submit",
+          onPress: (ab) => { 
+            setAnswer(ab);
+            postData(ab);
+          }
+        }
+      ],
+      'plain-text'
+    );
+    }
+
+  const timer = () => {
+  if (hours <= 23 && hours >= 11 ){
+    showA();
+  } else {
+    console.log("Not the time yet")
+  }
+}
+
+
   
   
   return (
     <ScrollView style={{ backgroundColor: 'white', marginHorizontal: 20 }}>
       <View style={styles.container}>
-        <Button title="Show alert" style={{padding: 10}} onPress={showAlert} />
-        <Button title='sendAnswer' onPress={postData}> </Button>
+        <Button title="Show alert" style={{padding: 10}} onPress = {timer} />
+        <Button title='sendAnswer' onPress={() => postData(answer)}> </Button>
         <Text>Make your flower bloom!</Text>
         <Text>Points: {points}</Text>
-        <Text>{question} {answer}</Text>
+        <Text> {answer}</Text>
       </View>
       <View style={styles.buttonContainer}>
         <Text>Ate a proper meal</Text>
