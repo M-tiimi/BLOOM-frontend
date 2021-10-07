@@ -1,29 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, Alert} from 'react-native';
-import { Button } from 'react-native-elements';
+import { StyleSheet, Text, View, TouchableNativeFeedback, Image, Alert, ScrollView} from 'react-native';
 import images from '../Image';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
-
+import Dialog from 'react-native-dialog';
 
 export default function Flower() {
 
-let hour = new Date().getHours();
+  let hour = new Date().getHours();
 
   const [points, setPoints] = useState(0);
   const [flowerImg, setFlowerImg] = useState(images.image3); 
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
-  const [hours, setHours] = useState(hour); 
+  const [visible, setVisible] = useState(false);
 
+  const showDialog = () => {
+    setVisible(true);
+  };
 
-  //vvoi lahettaa answerissa olevaa tietoa buttonin avulla
-  const postData = (ab) => {
-    const a = {title: ab}
-    console.log(ab)
-    fetch('http://192.168.100.3:8000/answers/',
+  const handleCancel = () => {
+    setVisible(false);
+  };
+
+  //send user's anwer to back through dialog button 
+  const postData = (answer) => {
+    setVisible(false);
+    console.log(answer);
+    const data = {title: answer};
+    fetch('http://192.168.43.17:8000/answers/',
       {
         method: 'POST',
-        body: JSON.stringify(a),
+        body: JSON.stringify(data),
         headers: { 'Content-type': 'application/json' }
       })
       .then(response => {
@@ -36,50 +43,22 @@ let hour = new Date().getHours();
       })
       .catch(err => console.error(err))
     }
-
-    //useEffectin sisassa kysymysten haku, alertin teko ja sen kutsuminen seka vastauksen lahettaminen tai cancel
     
-  
+  //get question from back and open dialog with input if the time is right
  useEffect( () => {
-  fetch(`http://192.168.100.3:8000/questions/`)
+  fetch(`http://192.168.43.17:8000/questions/`)
       .then(response => response.json())
       .then(data =>{
-         setQuestion(data[0].title) 
-
-        const showAlert = () => {
-          Alert.prompt(
-            data[0].title,
-            '',
-            [
-              {
-                text: "Cancel",
-                onPress: () => console.log("Cancel Pressed"),
-                style: "cancel"
-              },
-              {
-                text: "Submit",
-                onPress: (ab) => { 
-                  setAnswer(ab);
-                  postData(ab);
-                }
-              }
-            ],
-            'plain-text'
-          );
-      
-        };
-        if (hours <= 23 && hours >= 11 ){
-          showAlert();
+        setQuestion(data[0].title) 
+        console.log(hour)
+        if (hour <= 23 && hour >= 11){
+          setVisible(true);
         } else {
           console.log("Not the time yet")
-        }
-      })
-      .catch((e) => console.log(e))
- 
+        } 
+      }) 
+      .catch((e) => console.log(e)) 
   }, []);
-
-
-
 
   const buttonPressed = () => { 
     const sum = points + 2;
@@ -92,142 +71,148 @@ let hour = new Date().getHours();
     }
   }
 
- 
-  const showA = () => {
-    Alert.prompt(
-      question,
-      '',
-      [
-        {
-          text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
-          style: "cancel"
-        },
-        {
-          text: "Submit",
-          onPress: (ab) => { 
-            setAnswer(ab);
-            postData(ab);
-          }
-        }
-      ],
-      'plain-text'
-    );
-    }
-
-  const timer = () => {
-  if (hours <= 23 && hours >= 11 ){
-    showA();
-  } else {
-    console.log("Not the time yet")
-  }
-}
-
-
-  
-  
   return (
-    <ScrollView style={{ backgroundColor: 'white', marginHorizontal: 20 }}>
-      <View style={styles.container}>
-        <Button title="Show alert" style={{padding: 10}} onPress = {timer} />
-        <Button title='sendAnswer' onPress={() => postData(answer)}> </Button>
-        <Text>Make your flower bloom!</Text>
-        <Text>Points: {points}</Text>
-        <Text> {answer}</Text>
+    <ScrollView>
+    <View style={styles.container}>
+      <View style={styles.dialogContainer}>
+        <Dialog.Container visible={visible}>
+          <Dialog.Description style={{fontSize: 20}}>{question}</Dialog.Description>
+          <Dialog.Input
+            onChangeText={text => setAnswer(text)}
+          />
+          <Dialog.Button style={styles.buttonContainer} label='Submit' onPress={() => postData(answer)} />
+          <Dialog.Button style={styles.buttonContainer} label='Cancel' onPress={handleCancel} />
+        </Dialog.Container>
       </View>
-      <View style={styles.buttonContainer}>
-        <Text>Ate a proper meal</Text>
-          <Button onPress={buttonPressed}
-            icon={
-              <MaterialCommunityIcons
-                name="food-apple-outline"
-                size={24} 
-                color="white" 
-              />
-            }
-          /> 
-        </View>
-        <View style={styles.buttonContainer}>
-          <Text>Exercised for 10 minutes</Text>
-          <Button onPress={buttonPressed}
-            icon={
+      <View style={styles.touchContainer}>
+        <Text style={styles.textContainer}>Make your flower bloom!</Text>
+        <Text style={styles.textContainer}>Points: {points}</Text>
+        <TouchableNativeFeedback onPress = {showDialog}>
+          <View style={styles.iconContainer}>
+          <Text style={{color: 'white'}}>Show alert</Text> 
+          </View>
+        </TouchableNativeFeedback>
+      </View>
+      <View style={styles.touchContainer}>
+        <Text style={styles.textContainer}>Ate a proper meal</Text>
+        <TouchableNativeFeedback onPress={buttonPressed}>
+            <View  style={styles.touchContainer}>
+              <MaterialCommunityIcons 
+                name="food-apple-outline" 
+                style={styles.iconContainer} 
+                />
+            </View>
+          </TouchableNativeFeedback>
+      </View>
+      <View style={styles.touchContainer}>
+        <Text style={styles.textContainer}>Exercised for 10 minutes</Text>
+        <TouchableNativeFeedback onPress={buttonPressed}>
+            <View  style={styles.touchContainer}>
               <Ionicons 
                 name="barbell-outline"
-                size={25}
-                color="white"
+                style={styles.iconContainer}
               />
-            }
-          />
+            </View>
+          </TouchableNativeFeedback>
       </View>
-      <View style={styles.buttonContainer}>
-          <Text>Brushed teeth</Text>
-          <Button onPress={buttonPressed}
-            icon={
+      <View style={styles.touchContainer}>
+        <Text style={styles.textContainer}>Brushed teeth</Text>
+        <TouchableNativeFeedback onPress={buttonPressed}>
+            <View  style={styles.touchContainer}>
               <MaterialCommunityIcons
-                name="tooth-outline" 
-                size={24}
-                color="white" 
+                name="tooth-outline"
+                style={styles.iconContainer}
               />
-            }
-          />
+            </View>
+          </TouchableNativeFeedback>
       </View>
-      <View style={styles.buttonContainer}>
-          <Text>Slept well</Text>
-          <Button onPress={buttonPressed}
-            icon={
-              <MaterialCommunityIcons
-               name="sleep" 
-               size={24} 
-               color="white" 
+      <View style={styles.touchContainer}>
+        <Text style={styles.textContainer}>Slept well</Text>
+        <TouchableNativeFeedback onPress={buttonPressed}>
+            <View  style={styles.touchContainer}>
+            <MaterialCommunityIcons
+                name="sleep"
+                style={styles.iconContainer}
               />
-            }
-          />
+            </View>
+          </TouchableNativeFeedback>  
       </View>
-      <View style={styles.buttonContainer}>
-          <Text>Did something that made me happy</Text>
-          <Button onPress={buttonPressed}
-            icon={
+      <View style={styles.touchContainer}>
+        <Text style={styles.textContainer}>Did something that made me happy</Text>
+        <TouchableNativeFeedback onPress={buttonPressed}>
+            <View  style={styles.touchContainer}>
               <Ionicons 
-                name="happy-outline" 
-                size={24} 
-                color="white" 
+                name="happy-outline"
+                style={styles.iconContainer}
               />
-            }
-          />
+            </View>
+          </TouchableNativeFeedback>
       </View>
-          
+          {/* Laita kuva jotenkin viewin sisään? */}
             <Image
               style={styles.imageContainer}
-              source = {flowerImg} 
+              source={flowerImg} 
             />
-         
+        
+    </View>
     </ScrollView>
   );
 }
 
+ // Tee tyyleille oma kansio
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flex: 2,
     padding: 10,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  buttonContainer: {
-    flex: 1,
-    padding: 10,
-    flexDirection: 'row',
+  textContainer: {
+    fontSize: 18,
+  },
+  touchContainer: {
+    padding: 3,
+    flexDirection:'row',
     backgroundColor: '#fff',
+    alignSelf: 'stretch',
     alignItems: 'flex-end',
     justifyContent: 'space-between',
   },
+  iconContainer: {
+    color: 'white', 
+    alignSelf: 'stretch',
+    backgroundColor: 'rgb(136, 136, 250)',
+    fontSize: 35,
+    borderRadius: 100,
+    marginTop:10, 
+    paddingVertical: 10, 
+    paddingHorizontal: 15,
+    padding: -200,
+    flexDirection: 'row',
+    alignItems: 'flex-end',
+  },
+  buttonContainer: {
+    backgroundColor: 'rgb(136, 136, 250)',
+    fontSize: 20, 
+    color: 'white',
+    borderRadius: 15, 
+    marginTop:10,
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+  },
   imageContainer: {
-    width: '90%',
-    height: '90%',
+    flex: 1,
+    width: 200, 
+    height: 200,
     resizeMode: 'contain',
     backgroundColor: 'transparent',
     justifyContent: 'center',
   },
-});
-
-// 'rgba(255, 0, 0, 0.5)'
+  dialogContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+}); 
