@@ -1,15 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableNativeFeedback, Image, Alert, ScrollView} from 'react-native';
-import images from '../Image';
+import { Text, View, TouchableNativeFeedback, ScrollView} from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import Dialog from 'react-native-dialog';
+import styles from './Styles.js';
+import LottieView from 'lottie-react-native';
 
 export default function Flower() {
+
+  const resetAnimation = () => {
+    this.animation.reset();
+    this.animation.play();
+  };
 
   let hour = new Date().getHours();
 
   const [points, setPoints] = useState(0);
-  const [flowerImg, setFlowerImg] = useState(images.image3); 
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [visible, setVisible] = useState(false);
@@ -64,10 +69,10 @@ export default function Flower() {
     const sum = points + 2;
     setPoints(sum);
     if (sum >= 6 && sum <= 10) {
-      setFlowerImg(images.image2)
+      this.animation.play(0, 80)
     }
     else if (sum > 10) {
-      setFlowerImg(images.image1)
+      this.animation.play(80, 400)
     }
   }
 
@@ -147,72 +152,19 @@ export default function Flower() {
               />
             </View>
           </TouchableNativeFeedback>
+        </View>
+          <View style={styles.animationContainer}>
+        <LottieView
+          ref={animation => {
+            this.animation = animation;
+          }}
+          style={styles.animationStyle}
+          source={require('../assets/flower_animation.json')}
+          loop={false}
+        />
       </View>
-          {/* Laita kuva jotenkin viewin sisään? */}
-            <Image
-              style={styles.imageContainer}
-              source={flowerImg} 
-            />
-        
-    </View>
+      </View>
     </ScrollView>
   );
 }
 
- // Tee tyyleille oma kansio
-const styles = StyleSheet.create({
-  container: {
-    flex: 2,
-    padding: 10,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  textContainer: {
-    fontSize: 18,
-  },
-  touchContainer: {
-    padding: 3,
-    flexDirection:'row',
-    backgroundColor: '#fff',
-    alignSelf: 'stretch',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-  },
-  iconContainer: {
-    color: 'white', 
-    alignSelf: 'stretch',
-    backgroundColor: 'rgb(136, 136, 250)',
-    fontSize: 35,
-    borderRadius: 100,
-    marginTop:10, 
-    paddingVertical: 10, 
-    paddingHorizontal: 15,
-    padding: -200,
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-  },
-  buttonContainer: {
-    backgroundColor: 'rgb(136, 136, 250)',
-    fontSize: 20, 
-    color: 'white',
-    borderRadius: 15, 
-    marginTop:10,
-    paddingVertical: 10,
-    paddingHorizontal: 30,
-  },
-  imageContainer: {
-    flex: 1,
-    width: 200, 
-    height: 200,
-    resizeMode: 'contain',
-    backgroundColor: 'transparent',
-    justifyContent: 'center',
-  },
-  dialogContainer: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-}); 
