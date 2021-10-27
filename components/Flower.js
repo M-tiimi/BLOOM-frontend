@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, View, TouchableNativeFeedback, ScrollView} from 'react-native';
+import { Text, View, TouchableNativeFeedback, ScrollView, Button} from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import Dialog from 'react-native-dialog';
 import styles from './Styles.js';
@@ -18,6 +18,7 @@ export default function Flower() {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [visible, setVisible] = useState(false);
+  const [prediction, setPrediction] = useState('');
 
   const showDialog = () => {
     setVisible(true);
@@ -27,12 +28,22 @@ export default function Flower() {
     setVisible(false);
   };
 
-  //send user's anwer to back through dialog button 
+
+const getPrediction = () =>{
+console.log('hello pred')
+  fetch(`http://192.168.100.2:8000/ml-model/`)
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch((err) => console.log(err)) 
+  console.log('finished fetch')
+}
+
+  //send user's answer to back through dialog button 
   const postData = (answer) => {
     setVisible(false);
     console.log(answer);
     const data = {title: answer};
-    fetch('http://192.168.43.17:8000/answers/',
+    fetch('http://192.168.100.2:8000/answers/',
       {
         method: 'POST',
         body: JSON.stringify(data),
@@ -46,16 +57,15 @@ export default function Flower() {
           console.log('Error: Data sending failed')
         }
       })
-      .catch(err => console.error(err))
+      .catch(e => console.error(e))
     }
     
   //get question from back and open dialog with input if the time is right
  useEffect( () => {
-  fetch(`http://192.168.43.17:8000/questions/`)
+  fetch(`http://192.168.100.2:8000/questions/`)
       .then(response => response.json())
       .then(data =>{
         setQuestion(data[0].title) 
-        console.log(hour)
         if (hour <= 23 && hour >= 11){
           setVisible(true);
         } else {
@@ -80,6 +90,7 @@ export default function Flower() {
     <ScrollView>
     <View style={styles.container}>
       <View style={styles.dialogContainer}>
+        <Button title= 'getPrediction' onPress={getPrediction}> </Button>
         <Dialog.Container visible={visible}>
           <Dialog.Description style={{fontSize: 20}}>{question}</Dialog.Description>
           <Dialog.Input
