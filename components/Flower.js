@@ -28,22 +28,21 @@ export default function Flower() {
     setVisible(false);
   };
 
+  // TODO, gives prediction about answer is it good or bad
+  const getPrediction = () => {
+  console.log('hello pred')
+    fetch(`http://192.168.100.2:8000/ml-model/`)
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch((err) => console.log(err)) 
+    console.log('finished fetch')
+  }
 
-const getPrediction = () =>{
-console.log('hello pred')
-  fetch(`http://192.168.100.2:8000/ml-model/`)
-  .then(response => response.json())
-  .then(data => console.log(data))
-  .catch((err) => console.log(err)) 
-  console.log('finished fetch')
-}
-
-  //send user's answer to back through dialog button 
+  // send user's answer to back through dialog button 
   const postData = (answer) => {
     setVisible(false);
-    console.log(answer);
     const data = {title: answer};
-    fetch('http://192.168.100.2:8000/answers/',
+    fetch('http://bloom-app.azurewebsites.net/answers/',
       {
         method: 'POST',
         body: JSON.stringify(data),
@@ -60,31 +59,49 @@ console.log('hello pred')
       .catch(e => console.error(e))
     }
     
-  //get question from back and open dialog with input if the time is right
- useEffect( () => {
-  fetch(`http://192.168.100.2:8000/questions/`)
-      .then(response => response.json())
-      .then(data =>{
-        setQuestion(data[0].title) 
-        if (hour <= 23 && hour >= 11){
-          setVisible(true);
-        } else {
-          console.log("Not the time yet")
-        } 
-      }) 
-      .catch((e) => console.log(e)) 
-  }, []);
+  // get question from back and open dialog with input if the time is right
+  useEffect( () => {
+    fetch(`http://bloom-app.azurewebsites.net/questions/`)
+        .then(response => response.json())
+        .then(data =>{
+          setQuestion(data[0].title) 
+          if (hour <= 23 && hour >= 11){
+            setVisible(true);
+          } else {
+            console.log("Not the time yet")
+          } 
+        }) 
+        .catch((e) => console.log(e)) 
+    }, []);
 
+  // add points
   const buttonPressed = () => { 
     const sum = points + 2;
     setPoints(sum);
-    if (sum >= 6 && sum <= 10) {
+    calculatePoints();
+  }
+
+  // calculate points
+  const calculatePoints = () => {
+    if (points >= 6 && points <= 10) {
       this.animation.play(0, 80)
     }
-    else if (sum > 10) {
+    else if (points > 10) {
       this.animation.play(80, 400)
     }
+    else {
+      this.animation.reset()
+    }
   }
+
+  // set hourly intervall
+  setInterval(() => {
+    const sum = points - 2;
+    setPoints(sum)
+    console.log('Points reduced')
+    calculatePoints();
+  }, 60 * 1000);
+
 
   return (
     <ScrollView>
