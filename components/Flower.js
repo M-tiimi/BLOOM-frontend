@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef,  useEffect } from 'react';
 import { Text, View, TouchableNativeFeedback, ScrollView, Button} from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import Dialog from 'react-native-dialog';
@@ -14,6 +14,8 @@ export default function Flower() {
   const [answer, setAnswer] = useState('');
   const [visible, setVisible] = useState(false);
   const [prediction, setPrediction] = useState('');
+  
+  const animation = useRef(null);
 
   const showDialog = () => {
     setVisible(true);
@@ -23,7 +25,7 @@ export default function Flower() {
     setVisible(false);
   };
 
-  // TODO, gives prediction about answer is it good or bad
+  // TODO: gives prediction about answer is it good or bad
   const getPrediction = () => {
   console.log('hello pred')
     fetch(`http://192.168.100.2:8000/ml-model/`)
@@ -40,11 +42,11 @@ export default function Flower() {
   
   // last animation frames
   const feelingGood = () => {
-    this.animation.play(80, 400);
+    animation.current.play(80, 400);
   }
   // second animation frames
   const feelingOkay = () => {
-    this.animation.play(0, 80);
+    animation.current.play(0, 80);
   }
 
   // send user's answer to back through dialog button 
@@ -93,7 +95,7 @@ export default function Flower() {
       feelingGood();
     }
     else {
-      this.animation.reset();
+      animation.current.reset();
     }
   }, [points])
  
@@ -187,9 +189,7 @@ export default function Flower() {
         </View>
           <View style={styles.animationContainer}>
         <LottieView
-          ref={animation => {
-            this.animation = animation;
-          }}
+          ref={animation}
           style={styles.animationStyle}
           source={require('../assets/flower_animation.json')}
           loop={false}
