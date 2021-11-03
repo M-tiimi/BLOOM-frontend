@@ -7,11 +7,6 @@ import LottieView from 'lottie-react-native';
 
 export default function Flower() {
 
-  const resetAnimation = () => {
-    this.animation.reset();
-    this.animation.play();
-  };
-
   let hour = new Date().getHours();
 
   const [points, setPoints] = useState(0);
@@ -36,6 +31,20 @@ export default function Flower() {
     .then(data => console.log(data))
     .catch((err) => console.log(err)) 
     console.log('finished fetch')
+  } 
+  
+  // activity button pressed and points increase by two
+  const buttonPressed = () => {
+    setPoints(points => points + 2)
+  }
+  
+  // last animation frames
+  const feelingGood = () => {
+    this.animation.play(80, 400);
+  }
+  // second animation frames
+  const feelingOkay = () => {
+    this.animation.play(0, 80);
   }
 
   // send user's answer to back through dialog button 
@@ -72,36 +81,31 @@ export default function Flower() {
           } 
         }) 
         .catch((e) => console.log(e)) 
-    }, []);
-
-  // add points
-  const buttonPressed = () => { 
-    const sum = points + 2;
-    setPoints(sum);
-    calculatePoints();
-  }
-
-  // calculate points
-  const calculatePoints = () => {
+    }, []); 
+  
+  // check the activity points everytime they change and choose the correct animation
+  useEffect (() => {
+    console.log(points)
     if (points >= 6 && points <= 10) {
-      this.animation.play(0, 80)
+      feelingOkay();
     }
     else if (points > 10) {
-      this.animation.play(80, 400)
+      feelingGood();
     }
     else {
-      this.animation.reset()
+      this.animation.reset();
     }
-  }
-
-  // set hourly intervall
-  setInterval(() => {
-    const sum = points - 2;
-    setPoints(sum)
-    console.log('Points reduced')
-    calculatePoints();
-  }, 60 * 1000);
-
+  }, [points])
+ 
+  // hourly timer to decrease the points due to inactivity
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPoints(points => points - 2)
+    }, 10000);
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   return (
     <ScrollView>
