@@ -49,7 +49,7 @@ export default function Flower() {
     animation.current.play(0, 80);
   }
 
-  // send user's answer to back through dialog button 
+  // sends user's answer to back through dialog button 
   const postData = (answer) => {
     setVisible(false);
     const data = {title: answer};
@@ -70,7 +70,7 @@ export default function Flower() {
       .catch(e => console.error(e))
     }
     
-  // get question from back and open dialog with input if the time is right
+  // gets question from back and open dialog with input if the time is right
   useEffect( () => {
     fetch(`http://bloom-app.azurewebsites.net/questions/`)
         .then(response => response.json())
@@ -85,7 +85,7 @@ export default function Flower() {
         .catch((e) => console.log(e)) 
     }, []); 
   
-  // check the activity points everytime they change and choose the correct animation
+  // checks the activity points everytime they change and choose the correct animation
   useEffect (() => {
     console.log(points)
     if (points >= 6 && points <= 10) {
@@ -94,20 +94,34 @@ export default function Flower() {
     else if (points > 10) {
       feelingGood();
     }
-    else {
+    else if (points > 0 && points < 6){
       animation.current.reset();
+    } else {
+      setPoints(0);
     }
   }, [points])
  
-  // hourly timer to decrease the points due to inactivity
+  // hourly timer to decrease the points due to inactivity (for testing purposes every 10sec)
   useEffect(() => {
+    if (points == 0) {
+      return;
+    }
     const timer = setInterval(() => {
-      setPoints(points => points - 2)
+        setPoints(points => points - 2)
     }, 10000);
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [points]);
+
+  const longPress = () => {
+    console.log("Pressed")
+    return (
+      <View style={styles.container}>
+        <Text>Hello</Text>
+      </View>
+    );
+  } 
 
   return (
     <ScrollView>
@@ -134,7 +148,7 @@ export default function Flower() {
       </View>
       <View style={styles.touchContainer}>
         <Text style={styles.textContainer}>Ate a proper meal</Text>
-        <TouchableNativeFeedback onPress={buttonPressed}>
+        <TouchableNativeFeedback onPress={buttonPressed} onLongPress={longPress}>
             <View  style={styles.touchContainer}>
               <MaterialCommunityIcons 
                 name="food-apple-outline" 
