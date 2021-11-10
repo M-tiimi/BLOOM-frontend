@@ -114,15 +114,6 @@ export default function Flower() {
     };
   }, [points]);
 
-  const longPress = () => {
-    console.log("Pressed")
-    return (
-      <View style={styles.container}>
-        <Text>Hello</Text>
-      </View>
-    );
-  } 
-
   return (
     <ScrollView>
     <View style={styles.container}>
@@ -148,7 +139,7 @@ export default function Flower() {
       </View>
       <View style={styles.touchContainer}>
         <Text style={styles.textContainer}>Ate a proper meal</Text>
-        <TouchableNativeFeedback onPress={buttonPressed} onLongPress={longPress}>
+        <TouchableNativeFeedback onPress={buttonPressed}>
             <View  style={styles.touchContainer}>
               <MaterialCommunityIcons 
                 name="food-apple-outline" 
