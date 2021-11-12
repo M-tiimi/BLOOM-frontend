@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Flower from './components/Flower';
 import Information from './components/Information';
 import Login  from './components/Login';
@@ -7,6 +7,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import {createStackNavigator} from '@react-navigation/stack';
 import { signIn, store, changeSignInValue} from './components/testreducer';
+
 
 
 const Stack = createStackNavigator();
@@ -30,8 +31,18 @@ const AuthStack = ( ) => {
 
 export default function App() {
 
-  let boolVal = store.getState()
-  const [isSigned, setIsSigned] = useState(boolVal);
+  const [isSigned, setIsSigned] = useState(false);
+  let state= store.getState()
+
+  //update state from redux
+  store.subscribe(() => {
+   console.log(store.getState())
+   setIsSigned(true)
+  })
+
+  
+ 
+
 
   return (
     <NavigationContainer>

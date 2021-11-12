@@ -8,7 +8,8 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
-  Image
+  Image,
+  RefreshControlBase
 } from "react-native";
 import styles from "./Styles";
 import { signIn, store, changeSignInValue} from './testreducer';
@@ -43,7 +44,10 @@ export default function Login() {
       //Then with the data from the response in JSON...
       .then((data) => {
         console.log('Success:', data);
+        
+        //change redux value to true
         store.dispatch(signIn(true))
+        
        
         
        
