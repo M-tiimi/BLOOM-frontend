@@ -11,11 +11,17 @@ import {
   Image
 } from "react-native";
 import styles from "./Styles";
+import { signIn, store, changeSignInValue} from './testreducer';
+import { dispatch } from 'redux';
+
+
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
+ 
+
 
   const showDialog = () => {
     setVisible(true);
@@ -25,23 +31,27 @@ export default function Login() {
     setVisible(false);
   };
   
-  const postData = (email, password) => {
-    const data = {title: answer};
-    fetch('http://bloom-app.azurewebsites.net/answers/',
+  const postData = () => {
+    const data = {'username':'ansku', 'password':'useransku123'};
+    fetch('http://192.168.0.13:8000/token-auth/',
       {
         method: 'POST',
         body: JSON.stringify(data),
         headers: { 'Content-type': 'application/json' }
       })
-      .then(response => {
-        if (response.ok) {
-          console.log('Success: Data sent')
-        }
-        else {
-          console.log('Error: Data sending failed')
-        }
+      .then((response) => response.json())
+      //Then with the data from the response in JSON...
+      .then((data) => {
+        console.log('Success:', data);
+        store.dispatch(signIn(true))
+       
+        
+       
       })
-      .catch(e => console.error(e))
+      //Then with the error genereted...
+      .catch((error) => {
+        console.error('Error:', error);
+      });
     }
 
   return (
