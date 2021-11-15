@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   Button,
   Image,
-  RefreshControlBase
+  RefreshControlBase,
+  Alert
 } from "react-native";
 import styles from "./Styles";
 import { signIn, store, changeSignInValue} from './testreducer';
@@ -18,7 +19,7 @@ import { dispatch } from 'redux';
 
 
 export default function Login() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
  
@@ -31,10 +32,13 @@ export default function Login() {
   const handleCancel = () => {
     setVisible(false);
   };
+
+  //for local developement http://192.168.100.3:8000/token-auth/
   
   const postData = () => {
-    const data = {'username':'ansku', 'password':'useransku123'};
-    fetch('http://192.168.0.13:8000/token-auth/',
+    
+    const data = {'username':username.toLowerCase(), 'password':password};
+    fetch('http://192.168.100.3:8000/token-auth/',
       {
         method: 'POST',
         body: JSON.stringify(data),
@@ -43,13 +47,15 @@ export default function Login() {
       .then((response) => response.json())
       //Then with the data from the response in JSON...
       .then((data) => {
-        console.log('Success:', data);
-        
+        if (data.token != undefined){
+        console.log(data);
         //change redux value to true
         store.dispatch(signIn(true))
-        
-       
-        
+        }else{
+          store.dispatch(signIn(false))
+          Alert.alert('Wrong password or username');
+
+        }  
        
       })
       //Then with the error genereted...
@@ -60,18 +66,18 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="auto" />
+     {/* <StatusBar style="auto" />
       <View style={styles.dialogContainer}>
         <Dialog.Container visible={visible}>
           <Dialog.Description style={{fontSize: 20}}>Restore Password</Dialog.Description>
           <Dialog.Input
             label='E-mail address'
-            onChangeText={text => setEmail(text)}
+            onChangeText={text => setUsername(text)}
           />
-          <Dialog.Button style={styles.buttonContainer} label='Submit' onPress={() => postData(email)} />
+          <Dialog.Button style={styles.buttonContainer} label='Submit' onPress={() => postData(username)} />
           <Dialog.Button style={styles.buttonContainer} label='Cancel' onPress={handleCancel} />
         </Dialog.Container>
-      </View>
+  </View> */}
       <Image
           style={styles2.image}
           source={require('../assets/icon.png')}
@@ -79,9 +85,10 @@ export default function Login() {
       <View style={styles2.inputView}>
         <TextInput
           style={styles2.TextInput}
-          placeholder="E-mail"
-          textContentType="emailAddress"
-          onChangeText={(email) => setEmail(email)}
+          placeholder="Username"
+          textContentType="name"
+          autoCapitalize= 'none'
+          onChangeText={(username) => setUsername(username)}
         />
       </View>
       <View style={styles2.inputView}>
@@ -89,6 +96,7 @@ export default function Login() {
           style={styles2.TextInput}
           placeholder="Password"
           secureTextEntry={true}
+          autoCapitalize= 'none'
           onChangeText={(password) => setPassword(password)}
         />
       </View>

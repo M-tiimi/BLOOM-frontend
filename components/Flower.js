@@ -4,6 +4,8 @@ import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import Dialog from 'react-native-dialog';
 import styles from './Styles.js';
 import LottieView from 'lottie-react-native';
+import { signIn, store, changeSignInValue} from './testreducer';
+import { dispatch } from 'redux';
 
 export default function Flower() {
 
@@ -200,6 +202,7 @@ export default function Flower() {
           loop={false}
         />
       </View>
+      <Button title='Sign out' onPress={()=> store.dispatch(signIn(false))}></Button>
       </View>
     </ScrollView>
   );
