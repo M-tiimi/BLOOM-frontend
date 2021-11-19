@@ -8,7 +8,7 @@ export function signIn(value) {
     }
 }
 
-//reducer
+//Reducer
 export function changeSignInValue(state, action) {
     if (state == undefined) {
         state == false
@@ -18,7 +18,6 @@ export function changeSignInValue(state, action) {
     } else {
         return state == false
     }
-
 }
 
 export const store = createStore(changeSignInValue);

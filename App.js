@@ -1,28 +1,76 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Flower from './components/Flower';
 import Information from './components/Information';
 import Login from './components/Login';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
-import { signIn, store, changeSignInValue } from './components/Signinreducer';
+import { signIn, store } from './components/SigninReducer';
 
 const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 const AppStack = () => {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Flower" component={Flower} />
-    </Stack.Navigator>
+    <Tab.Navigator>
+      <Tab.Screen name="Flower"
+        component={Flower}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <MaterialCommunityIcons name="flower" color={color} size={size} />
+          ),
+          headerStyle: {
+            backgroundColor: 'rgb(116, 144, 147)',
+          },
+          headerRight: () => (
+            <AntDesign.Button
+              onPress={() => store.dispatch(signIn(false))}
+              color="black"
+              backgroundColor="rgb(116, 144, 147)"
+              name="logout"
+              size={28}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Information"
+        component={Information}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="information-circle" color={color} size={size} />
+          ),
+          headerStyle: {
+            backgroundColor: 'rgb(116, 144, 147)',
+          },
+          headerRight: () => (
+            <AntDesign.Button
+              onPress={() => store.dispatch(signIn(false))}
+              color="black"
+              backgroundColor="rgb(116, 144, 147)"
+              name="logout"
+              size={28}
+            />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
 };
-
 
 const AuthStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{
+          headerStyle: {
+            backgroundColor: 'rgb(116, 144, 147)',
+          }
+        }}
+      />
     </Stack.Navigator>
   );
 };
@@ -31,49 +79,15 @@ export default function App() {
 
   const [isSigned, setIsSigned] = useState(false);
 
-  //update state from redux
+  // Update state from redux
   store.subscribe(() => {
     setIsSigned(store.getState());
   })
 
   return (
-
-    //Check if 'isSigned' is true and change the path from 'Login' to 'Flower' if true    
+    // Check if 'isSigned' is true and change the path from 'Login' to 'Flower' if true    
     <NavigationContainer>
       {isSigned ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 }
-
-/*<NavigationContainer>
-      <Tab.Navigator>
-
-        <Tab.Screen
-          name="Login"
-          component={Login}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="information-circle" color={color} size={size} />
-            )
-          }}
-        />
-
-        <Ta name="Flower"
-          component={Flower}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="flower" color={color} size={size} />
-            )
-          }}
-        />
-        <Tab.Screen
-          name="Information"
-          component={Information}
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="information-circle" color={color} size={size} />
-            )
-          }}
-        />
-
-      </Tab.Navigator>*/
