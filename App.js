@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Flower from './components/Flower';
 import Information from './components/Information';
-import Login  from './components/Login';
+import Login from './components/Login';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
-import {createStackNavigator} from '@react-navigation/stack';
-import { signIn, store, changeSignInValue} from './components/testreducer';
+import { createStackNavigator } from '@react-navigation/stack';
+import { signIn, store, changeSignInValue } from './components/Signinreducer';
 
-
-
-const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const AppStack = () => {
@@ -20,11 +17,12 @@ const AppStack = () => {
     </Stack.Navigator>
   );
 };
-  
-const AuthStack = ( ) => {
+
+
+const AuthStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Login" component={ Login }  />
+      <Stack.Screen name="Login" component={Login} />
     </Stack.Navigator>
   );
 };
@@ -32,23 +30,17 @@ const AuthStack = ( ) => {
 export default function App() {
 
   const [isSigned, setIsSigned] = useState(false);
-  
-  
- 
 
   //update state from redux
   store.subscribe(() => {
-   console.log(store.getState());
-   setIsSigned(store.getState());
+    setIsSigned(store.getState());
   })
 
-  
- 
-
-
   return (
+
+    //Check if 'isSigned' is true and change the path from 'Login' to 'Flower' if true    
     <NavigationContainer>
-      {isSigned ? <AppStack/> : <AuthStack />}
+      {isSigned ? <AppStack /> : <AuthStack />}
     </NavigationContainer>
   );
 }
@@ -64,17 +56,16 @@ export default function App() {
               <Ionicons name="information-circle" color={color} size={size} />
             )
           }}
-        /> 
-         
-        <Tab.Screen
-          name="Flower"
+        />
+
+        <Ta name="Flower"
           component={Flower}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialCommunityIcons name="flower" color={color} size={size} />
             )
           }}
-        /> 
+        />
         <Tab.Screen
           name="Information"
           component={Information}
@@ -83,6 +74,6 @@ export default function App() {
               <Ionicons name="information-circle" color={color} size={size} />
             )
           }}
-        /> 
-      
-      </Tab.Navigator> */
+        />
+
+      </Tab.Navigator>*/

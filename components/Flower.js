@@ -4,7 +4,7 @@ import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import Dialog from 'react-native-dialog';
 import styles from './Styles.js';
 import LottieView from 'lottie-react-native';
-import { signIn, store, changeSignInValue} from './testreducer';
+import { signIn, store, changeSignInValue} from './Signinreducer';
 import { dispatch } from 'redux';
 
 export default function Flower() {

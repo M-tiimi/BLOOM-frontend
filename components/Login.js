@@ -1,43 +1,25 @@
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
-import Dialog from 'react-native-dialog';
 import {
   StyleSheet,
   Text,
   View,
   TextInput,
   TouchableOpacity,
-  Button,
   Image,
-  RefreshControlBase,
   Alert
 } from "react-native";
 import styles from "./Styles";
-import { signIn, store, changeSignInValue} from './testreducer';
+import { signIn, store, changeSignInValue} from './Signinreducer';
 import { dispatch } from 'redux';
-
-
 
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [visible, setVisible] = useState(false);
- 
 
-
-  const showDialog = () => {
-    setVisible(true);
-  };
-
-  const handleCancel = () => {
-    setVisible(false);
-  };
-
-  //for local developement http://192.168.100.3:8000/token-auth/
-  
+  //post user data to back to authenticate 
   const postData = () => {
-    
     const data = {'username':username.toLowerCase(), 'password':password};
+  //Deployement is pending, we use local
     fetch('http://192.168.100.3:8000/token-auth/',
       {
         method: 'POST',
@@ -51,12 +33,10 @@ export default function Login() {
         console.log(data);
         //change redux value to true
         store.dispatch(signIn(true))
-        }else{
+        } else {
           store.dispatch(signIn(false))
           Alert.alert('Wrong password or username');
-
         }  
-       
       })
       //Then with the error genereted...
       .catch((error) => {
@@ -66,18 +46,6 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
-     {/* <StatusBar style="auto" />
-      <View style={styles.dialogContainer}>
-        <Dialog.Container visible={visible}>
-          <Dialog.Description style={{fontSize: 20}}>Restore Password</Dialog.Description>
-          <Dialog.Input
-            label='E-mail address'
-            onChangeText={text => setUsername(text)}
-          />
-          <Dialog.Button style={styles.buttonContainer} label='Submit' onPress={() => postData(username)} />
-          <Dialog.Button style={styles.buttonContainer} label='Cancel' onPress={handleCancel} />
-        </Dialog.Container>
-  </View> */}
       <Image
           style={styles2.image}
           source={require('../assets/icon.png')}
@@ -100,9 +68,6 @@ export default function Login() {
           onChangeText={(password) => setPassword(password)}
         />
       </View>
-      <TouchableOpacity onPress = {showDialog}>
-        <Text style={styles2.forgot_button}>Forgot Password?</Text>
-      </TouchableOpacity>
       <TouchableOpacity onPress={postData} style={styles2.loginBtn}>
         <Text>LOGIN</Text>
       </TouchableOpacity>
