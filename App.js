@@ -38,7 +38,6 @@ export default function App() {
 
   //update state from redux
   store.subscribe(() => {
-   console.log(store.getState());
    setIsSigned(store.getState());
   })
 

@@ -38,13 +38,13 @@ export default function Login() {
   const postData = () => {
     
     const data = {'username':username.toLowerCase(), 'password':password};
-    fetch('http://192.168.100.3:8000/token-auth/',
+    fetch('https://bloom-app.azurewebsites.net/token-auth/',
       {
         method: 'POST',
         body: JSON.stringify(data),
         headers: { 'Content-type': 'application/json' }
       })
-      .then((response) => response.json())
+      .then(response => response.json())
       //Then with the data from the response in JSON...
       .then((data) => {
         if (data.token != undefined){

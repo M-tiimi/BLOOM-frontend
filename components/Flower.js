@@ -29,13 +29,24 @@ export default function Flower() {
 
   // TODO: gives prediction about answer is it good or bad
   const getPrediction = () => {
-  console.log('hello pred')
-    fetch(`http://192.168.100.2:8000/ml-model/`)
-    .then(response => response.json())
-    .then(data => console.log(data))
-    .catch((err) => console.log(err)) 
-    console.log('finished fetch')
-  } 
+  const dataToPost = {data: 'I hate life'};
+    fetch(`http://192.168.100.3:8000/ml-model/`,
+      {
+        method: 'POST',
+        body: JSON.stringify(dataToPost),
+        headers: { 'Content-type': 'application/json' }
+      })
+      .then(response => {
+        if (response.ok) {
+          console.log('Success: Data sent')
+        }
+        else {
+          console.log('Error: Data sending failed')
+        }
+      })
+      .catch(e => console.error(e))
+    }
+  
   
   // activity button pressed and points increase by two
   const buttonPressed = () => {
