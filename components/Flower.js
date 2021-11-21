@@ -34,14 +34,8 @@ export default function Flower() {
         body: JSON.stringify(dataToPost),
         headers: { 'Content-type': 'application/json' }
       })
-      .then(response => {
-        if (response.ok) {
-          console.log('Success: Data sent')
-        }
-        else {
-          console.log('Error: Data sending failed')
-        }
-      })
+      .then(response => response.json())
+      .then((data) => console.log(data))
       .catch(e => console.error(e))
     }
   
