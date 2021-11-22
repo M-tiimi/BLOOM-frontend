@@ -38,10 +38,12 @@ export default function Flower() {
       .then(response => response.json())
       .then(data => {
         setPrediction(data.prediction[1])
-        // TODO: prediction ei ehdi kai päivittyä ennen if vertailua
-        console.log(prediction);
-        if (prediction === 'data is negative') {
-          Alert.alert('You suck');
+        console.log(data.prediction[1]);
+        console.log(answer);
+        if (prediction === ' data is negative') { //theres a space before data cause it doesnt work otherwise
+          Alert.alert('oh no :(');
+        } else {
+          Alert.alert('nice :)');
         }
       })
       .catch(e => console.error(e))
@@ -129,7 +131,7 @@ export default function Flower() {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.dialogContainer}>
-          <Button color='rgb(116, 144, 147)' title='getPrediction' onPress={getPrediction}> </Button>
+         {/* <Button color='rgb(116, 144, 147)' title='getPrediction' onPress={getPrediction}> </Button>  */}
           <Dialog.Container visible={visible}>
             <Dialog.Description style={{ fontSize: 20 }}>{question}</Dialog.Description>
             <Dialog.Input
