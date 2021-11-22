@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Text, View, TouchableNativeFeedback, ScrollView, Button } from 'react-native';
+import { Text, View, TouchableNativeFeedback, ScrollView, Button, Alert } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import Dialog from 'react-native-dialog';
 import styles from './Styles.js';
@@ -26,20 +26,27 @@ export default function Flower() {
   };
 
   // TODO: gives prediction about answer is it good or bad
-  const getPrediction = () => {
-  const dataToPost = {data: 'I hate life'};
-    fetch(`http://192.168.100.3:8000/ml-model/`,
+  const getPrediction = (answer) => {
+    setVisible(false);
+    const dataToPost = { data: answer };
+    fetch(`http://bloom-app.azurewebsites.net/ml-model/`,
       {
         method: 'POST',
         body: JSON.stringify(dataToPost),
         headers: { 'Content-type': 'application/json' }
       })
       .then(response => response.json())
-      .then((data) => console.log(data))
+      .then(data => {
+        setPrediction(data.prediction[1])
+        // TODO: prediction ei ehdi kai päivittyä ennen if vertailua
+        console.log(prediction);
+        if (prediction === 'data is negative') {
+          Alert.alert('You suck');
+        }
+      })
       .catch(e => console.error(e))
-    }
-  
-  
+  }
+
   // activity button pressed and points increase by two
   const buttonPressed = () => {
     setPoints(points => points + 2)
@@ -128,7 +135,7 @@ export default function Flower() {
             <Dialog.Input
               onChangeText={text => setAnswer(text)}
             />
-            <Dialog.Button style={styles.buttonContainer} label='Submit' onPress={() => postData(answer)} />
+            <Dialog.Button style={styles.buttonContainer} label='Submit' onPress={() => getPrediction(answer)} />
             <Dialog.Button style={styles.buttonContainer} label='Cancel' onPress={handleCancel} />
           </Dialog.Container>
         </View>
