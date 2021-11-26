@@ -99,7 +99,7 @@ const AuthStack = () => {
 
 export default function App() {
 
-  const [isSigned, setIsSigned] = useState(false);
+  const [isSigned, setIsSigned] = useState(true);
 
   // Update state from redux
   store.subscribe(() => {
