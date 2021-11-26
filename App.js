@@ -4,9 +4,10 @@ import Information from './components/Information';
 import Login from './components/Login';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MaterialCommunityIcons, Ionicons, AntDesign } from '@expo/vector-icons';
+import { MaterialCommunityIcons, Ionicons, AntDesign, FontAwesome } from '@expo/vector-icons';
 import { createStackNavigator } from '@react-navigation/stack';
 import { signIn, store } from './components/SigninReducer';
+import SetActivities from './components/SetActivities';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -33,6 +34,27 @@ const AppStack = () => {
             />
           ),
         }}
+      />
+      <Tab.Screen
+        name="Add Task"
+        component={SetActivities}
+        options= {{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="tasks" size={24} color="black" />
+          ),
+          headerStyle: {
+            backgroundColor: 'rgb(116, 144, 147)',
+          },
+          headerRight: () => (
+            <AntDesign.Button
+              onPress={() => store.dispatch(signIn(false))}
+              color="black"
+              backgroundColor="rgb(116, 144, 147)"
+              name="logout"
+              size={28}
+            />
+          ),
+        }} 
       />
       <Tab.Screen
         name="Information"
@@ -77,7 +99,7 @@ const AuthStack = () => {
 
 export default function App() {
 
-  const [isSigned, setIsSigned] = useState(false);
+  const [isSigned, setIsSigned] = useState(true);
 
   // Update state from redux
   store.subscribe(() => {

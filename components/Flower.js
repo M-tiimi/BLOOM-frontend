@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Text, View, TouchableNativeFeedback, ScrollView, Button } from 'react-native';
+import { Text, View, TouchableNativeFeedback, ScrollView, Button, Alert, Linking } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import Dialog from 'react-native-dialog';
 import styles from './Styles.js';
 import LottieView from 'lottie-react-native';
 
-export default function Flower() {
+export default function Flower({ navigation }) {
 
   let hour = new Date().getHours();
 
@@ -13,6 +13,7 @@ export default function Flower() {
   const [question, setQuestion] = useState('');
   const [answer, setAnswer] = useState('');
   const [visible, setVisible] = useState(false);
+  const [visible2, setVisible2] = useState(false);
   const [prediction, setPrediction] = useState('');
 
   const animation = useRef(null);
@@ -25,21 +26,39 @@ export default function Flower() {
     setVisible(false);
   };
 
+  const showDialog2 = () => {
+    setVisible2(true);
+  };
+
+  const handleCancel2 = () => {
+    setVisible2(false);
+    navigation.navigate('Information');
+  };
+
   // TODO: gives prediction about answer is it good or bad
-  const getPrediction = () => {
-  const dataToPost = {data: 'I hate life'};
-    fetch(`https://bloom-app.azurewebsites.net/ml-model/`,
+  const getPrediction = (answer) => {
+    setVisible(false);
+    const dataToPost = { data: answer };
+    fetch(`http://bloom-app.azurewebsites.net/ml-model/`,
       {
         method: 'POST',
         body: JSON.stringify(dataToPost),
         headers: { 'Content-type': 'application/json' }
       })
       .then(response => response.json())
-      .then((data) => console.log(data))
+      .then(data => {
+        setPrediction(data.prediction[1])
+        console.log(data.prediction[1]);
+        console.log(answer);
+        if (prediction === ' data is negative') { //there's a space before data cause it doesnt work otherwise
+          showDialog2();
+        } else {
+          Alert.alert('nice :)');
+        }
+      })
       .catch(e => console.error(e))
-    }
-  
-  
+  }
+
   // activity button pressed and points increase by two
   const buttonPressed = () => {
     setPoints(points => points + 2)
@@ -73,6 +92,12 @@ export default function Flower() {
         }
       })
       .catch(e => console.error(e))
+  }
+
+  //opens sekasin247 chat
+  const openChat = () => {
+    Linking.openURL('https://sekasin247.fi/');
+    setVisible2(false);
   }
 
   // gets question from back and open dialog with input if the time is right
@@ -122,14 +147,20 @@ export default function Flower() {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.dialogContainer}>
-          <Button color='rgb(116, 144, 147)' title='getPrediction' onPress={getPrediction}> </Button>
           <Dialog.Container visible={visible}>
             <Dialog.Description style={{ fontSize: 20 }}>{question}</Dialog.Description>
             <Dialog.Input
               onChangeText={text => setAnswer(text)}
             />
-            <Dialog.Button style={styles.buttonContainer} label='Submit' onPress={() => postData(answer)} />
+            <Dialog.Button style={styles.buttonContainer} label='Submit' onPress={() => getPrediction(answer)} />
             <Dialog.Button style={styles.buttonContainer} label='Cancel' onPress={handleCancel} />
+          </Dialog.Container>
+        </View>
+        <View style={styles.dialogContainer}>
+          <Dialog.Container visible={visible2}>
+            <Dialog.Description style={{ fontSize: 20 }}>Do you want talk?</Dialog.Description>
+            <Dialog.Button style={styles.buttonContainer} label='Yes' onPress={openChat} />
+            <Dialog.Button style={styles.buttonContainer} label='No' onPress={handleCancel2}/>
           </Dialog.Container>
         </View>
         <View style={styles.touchContainer}>
