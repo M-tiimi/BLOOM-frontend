@@ -28,7 +28,7 @@ export default function Flower() {
   // TODO: gives prediction about answer is it good or bad
   const getPrediction = () => {
   const dataToPost = {data: 'I hate life'};
-    fetch(`http://192.168.100.3:8000/ml-model/`,
+    fetch(`https://bloom-app.azurewebsites.net/ml-model/`,
       {
         method: 'POST',
         body: JSON.stringify(dataToPost),
@@ -58,7 +58,7 @@ export default function Flower() {
   const postData = (answer) => {
     setVisible(false);
     const data = { title: answer };
-    fetch('http://bloom-app.azurewebsites.net/answers/',
+    fetch('https://bloom-app.azurewebsites.net/answers/',
       {
         method: 'POST',
         body: JSON.stringify(data),
@@ -77,7 +77,7 @@ export default function Flower() {
 
   // gets question from back and open dialog with input if the time is right
   useEffect(() => {
-    fetch(`http://bloom-app.azurewebsites.net/questions/`)
+    fetch(`https://bloom-app.azurewebsites.net/questions/`)
       .then(response => response.json())
       .then(data => {
         setQuestion(data[0].title)
