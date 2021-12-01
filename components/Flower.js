@@ -50,6 +50,7 @@ export default function Flower({ navigation }) {
         setPrediction(data.prediction[1])
         console.log(data.prediction[1]);
         console.log(answer);
+        console.log(data.prediction)
         if (prediction === ' data is negative') { //there's a space before data cause it doesnt work otherwise
           showDialog2();
         } else {

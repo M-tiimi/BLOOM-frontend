@@ -9,7 +9,7 @@ export default function Login() {
 
   //Post user data to back to authenticate 
   const postData = () => {
-    const data = { 'username': username.toLowerCase(), 'password': password };
+    const data = { 'username': username, 'password': password };
     fetch('https://bloom-app.azurewebsites.net/token-auth/',
       {
         method: 'POST',

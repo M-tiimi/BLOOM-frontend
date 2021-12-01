@@ -8,6 +8,7 @@ import { MaterialCommunityIcons, Ionicons, AntDesign, FontAwesome } from '@expo/
 import { createStackNavigator } from '@react-navigation/stack';
 import { signIn, store } from './components/SigninReducer';
 import SetActivities from './components/SetActivities';
+import Register from './components/Register';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -84,7 +85,7 @@ const AppStack = () => {
 const AuthStack = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
+    <Stack.Screen
         name="Login"
         component={Login}
         options={{
@@ -99,7 +100,7 @@ const AuthStack = () => {
 
 export default function App() {
 
-  const [isSigned, setIsSigned] = useState(true);
+  const [isSigned, setIsSigned] = useState(false);
 
   // Update state from redux
   store.subscribe(() => {
