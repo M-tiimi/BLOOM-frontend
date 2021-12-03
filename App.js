@@ -41,7 +41,7 @@ const AppStack = () => {
         component={SetActivities}
         options= {{
           tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="tasks" size={24} color="black" />
+            <FontAwesome name="tasks" size={24} color={color}/>
           ),
           headerStyle: {
             backgroundColor: 'rgb(116, 144, 147)',
@@ -91,8 +91,13 @@ const AuthStack = () => {
         options={{
           headerStyle: {
             backgroundColor: 'rgb(116, 144, 147)',
-          }
+          },
+          headerTitle:""
         }}
+      />
+      <Stack.Screen
+        name="Register"
+        component={Register}
       />
     </Stack.Navigator>
   );

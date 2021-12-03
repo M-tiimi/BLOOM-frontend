@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert} from
 import styles from "./Styles";
 import { signIn, store } from './SigninReducer';
 
-export default function Login() {
+export default function Login({ navigation }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -35,7 +35,7 @@ export default function Login() {
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.loginContainer}>
       <Image
         style={styles2.image}
         source={require('../assets/image.png')}
@@ -62,17 +62,14 @@ export default function Login() {
       <TouchableOpacity onPress={postData} style={styles2.loginBtn}>
         <Text>LOGIN</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles2.registerBtn} onPress={() => navigation.navigate('Register')}>
+        <Text>Register here</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles2 = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
   title: {
     fontFamily: 'serif',
     fontSize: 20, 
@@ -99,8 +96,17 @@ const styles2 = StyleSheet.create({
     height: 50,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 40,
+    marginTop: 20,
     backgroundColor: "rgb(116, 144, 147)",
+  },
+  registerBtn: {
+    width: "40%",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+    backgroundColor: "transparent",
   },
   image: {
     width: "45%",
@@ -108,7 +114,6 @@ const styles2 = StyleSheet.create({
     borderRadius: 25,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: -100,
     marginBottom: 5,
     backgroundColor: "transparent",
   },

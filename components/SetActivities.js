@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState } from 'react';
 import { Text, View, Button, TextInput, FlatList } from 'react-native';
 import styles from './Styles';
@@ -10,7 +9,7 @@ export default function SetActivities() {
     const [activity, setActivity] = useState('');
 
 
-    const addTask= () => {
+    const addTask = () => {
         console.log("add task")
         const dataToPost = {
             title: activity,
@@ -33,6 +32,7 @@ export default function SetActivities() {
           .then(response => response.json())
           .then(data => {
             console.log(data)
+            setActivity('');
         } )
           .catch(e => console.error(e))
       }

@@ -8,6 +8,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  loginContainer: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   infoContainer: {
     flex: 1,
     backgroundColor: '#fff',
@@ -40,7 +46,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   touchContainer: {
-    padding: 3,
+    padding: 1,
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    alignSelf: 'stretch',
+    alignItems: 'flex-end',
+    justifyContent: 'space-between',
+  },
+  flatlistContainer: {
+    padding: 1,
     flexDirection: 'row',
     backgroundColor: '#fff',
     alignSelf: 'stretch',
@@ -55,7 +69,6 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    padding: -200,
     flexDirection: 'row',
     alignItems: 'flex-end',
   },
@@ -69,10 +82,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
   },
   animationContainer: {
-    flex: 4,
+    flex: 1,
     width: 300,
     height: 300,
-    marginTop: 40,
     resizeMode: 'contain',
     justifyContent: 'center',
     borderRadius: 150,
@@ -92,6 +104,36 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  title: {
+    fontFamily: 'serif',
+    fontSize: 20, 
+    marginBottom: 30, 
+  },
+  loginBtn: {
+    width: "40%",
+    borderRadius: 25,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 20,
+    backgroundColor: "rgb(116, 144, 147)",
+  },
+  inputView: {
+    backgroundColor: "#fff",
+    borderRadius: 30,
+    width: "70%",
+    height: 45,
+    marginBottom: 20,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: 'black',
+  },
+  registerInput: {
+    height: 50,
+    flex: 1,
+    padding: 10,
+  }
 });
 
 export default styles;

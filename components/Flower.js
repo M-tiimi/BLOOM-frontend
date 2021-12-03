@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Text, View, TouchableNativeFeedback, ScrollView, Button, Alert, Linking } from 'react-native';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
+import { Text, View, TouchableNativeFeedback, ScrollView, FlatList, Alert, Linking } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 import Dialog from 'react-native-dialog';
 import styles from './Styles.js';
 import LottieView from 'lottie-react-native';
@@ -15,6 +15,8 @@ export default function Flower({ navigation }) {
   const [visible, setVisible] = useState(false);
   const [visible2, setVisible2] = useState(false);
   const [prediction, setPrediction] = useState('');
+  const [activities, setActivities] = useState([]);
+  const [activity, setActivity] = useState('');
 
   const animation = useRef(null);
 
@@ -35,7 +37,7 @@ export default function Flower({ navigation }) {
     navigation.navigate('Information');
   };
 
-  // TODO: gives prediction about answer is it good or bad
+  // Gives prediction about answer is it good or bad
   const getPrediction = (answer) => {
     setVisible(false);
     const dataToPost = { data: answer };
@@ -74,36 +76,25 @@ export default function Flower({ navigation }) {
     animation.current.play(0, 80);
   }
 
-  // sends user's answer to back through dialog button 
-  const postData = (answer) => {
-    setVisible(false);
-    const data = { title: answer };
-    fetch('https://bloom-app.azurewebsites.net/answers/',
-      {
-        method: 'POST',
-        body: JSON.stringify(data),
-        headers: { 'Content-type': 'application/json' }
-      })
-      .then(response => {
-        if (response.ok) {
-          console.log('Success: Data sent')
-        }
-        else {
-          console.log('Error: Data sending failed')
-        }
-      })
-      .catch(e => console.error(e))
-  }
-
   //opens sekasin247 chat
   const openChat = () => {
     Linking.openURL('https://sekasin247.fi/');
     setVisible2(false);
   }
 
+  //Get user's tasks
+  useEffect(() => {
+    fetch(`http://bloom-app.azurewebsites.net/tasks/`)
+      .then(response => response.json())
+      .then(data => {
+        setActivities(data)
+      })
+      .catch(e => console.error(e))
+  });
+
   // gets question from back and open dialog with input if the time is right
   useEffect(() => {
-    fetch(`https://bloom-app.azurewebsites.net/questions/`)
+    fetch(`https://bloom-app.azurewebsites.net/question/`)
       .then(response => response.json())
       .then(data => {
         setQuestion(data[0].title)
@@ -161,11 +152,11 @@ export default function Flower({ navigation }) {
           <Dialog.Container visible={visible2}>
             <Dialog.Description style={{ fontSize: 20 }}>Do you want talk?</Dialog.Description>
             <Dialog.Button style={styles.buttonContainer} label='Yes' onPress={openChat} />
-            <Dialog.Button style={styles.buttonContainer} label='No' onPress={handleCancel2}/>
+            <Dialog.Button style={styles.buttonContainer} label='No' onPress={handleCancel2} />
           </Dialog.Container>
         </View>
         <View style={styles.touchContainer}>
-          <Text style={styles.textContainer}>Make your flower bloom!</Text>
+          <Text style={styles.textContainer}>Hello user!</Text>
           <Text style={styles.textContainer}> Points: {points}</Text>
           <TouchableNativeFeedback onPress={showDialog}>
             <View style={styles.iconContainer}>
@@ -173,60 +164,22 @@ export default function Flower({ navigation }) {
             </View>
           </TouchableNativeFeedback>
         </View>
-        <View style={styles.touchContainer}>
-          <Text style={styles.textContainer}>Ate a proper meal</Text>
-          <TouchableNativeFeedback onPress={buttonPressed}>
-            <View style={styles.touchContainer}>
-              <MaterialCommunityIcons
-                name="food-apple-outline"
-                style={styles.iconContainer}
-              />
-            </View>
-          </TouchableNativeFeedback>
-        </View>
-        <View style={styles.touchContainer}>
-          <Text style={styles.textContainer}>Exercised for 10 minutes</Text>
-          <TouchableNativeFeedback onPress={buttonPressed}>
-            <View style={styles.touchContainer}>
-              <Ionicons
-                name="barbell-outline"
-                style={styles.iconContainer}
-              />
-            </View>
-          </TouchableNativeFeedback>
-        </View>
-        <View style={styles.touchContainer}>
-          <Text style={styles.textContainer}>Brushed teeth</Text>
-          <TouchableNativeFeedback onPress={buttonPressed}>
-            <View style={styles.touchContainer}>
-              <MaterialCommunityIcons
-                name="tooth-outline"
-                style={styles.iconContainer}
-              />
-            </View>
-          </TouchableNativeFeedback>
-        </View>
-        <View style={styles.touchContainer}>
-          <Text style={styles.textContainer}>Slept well</Text>
-          <TouchableNativeFeedback onPress={buttonPressed}>
-            <View style={styles.touchContainer}>
-              <MaterialCommunityIcons
-                name="sleep"
-                style={styles.iconContainer}
-              />
-            </View>
-          </TouchableNativeFeedback>
-        </View>
-        <View style={styles.touchContainer}>
-          <Text style={styles.textContainer}>Did something that made me happy</Text>
-          <TouchableNativeFeedback onPress={buttonPressed}>
-            <View style={styles.touchContainer}>
-              <Ionicons
-                name="happy-outline"
-                style={styles.iconContainer}
-              />
-            </View>
-          </TouchableNativeFeedback>
+        <View style={styles.flatlistContainer}>
+          <FlatList
+            data={activities}
+            keyExtractor={((item, index) => index.toString())}
+            renderItem={({ item }) =>
+              <View style={styles.touchContainer}>
+                <Text>{item.title}</Text>
+                <AntDesign.Button
+                  backgroundColor="rgb(116, 144, 147)"
+                  onPress={buttonPressed}
+                  name="checkcircleo"
+                  size={24}
+                  color="black" />
+              </View>
+            }
+          />
         </View>
         <View style={styles.animationContainer}>
           <LottieView
