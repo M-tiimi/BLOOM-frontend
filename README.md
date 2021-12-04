@@ -2,6 +2,7 @@
 ## M-Team
 Juulia Jokinen, Jelena Laakkonen, Veera Leppänen, Anne-Mari Mannila, Areta Santos
 ## Project idea
+This project was created during Haaga-Helia's Software Poject II -course. in fall 2021.
 In this project, the idea is to create an app ment for aiding user in taking care of their physical and mental health. This is done with few different functionalities. 
 ### Flower
 The main idea is to take care of a flower which will grow when user is taking care of themselfes, and starts to die when not. There are ready-made tasks, for example
