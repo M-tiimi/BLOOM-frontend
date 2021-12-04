@@ -13,4 +13,5 @@ The app will ask you daily how are you doing, and prompt you to give answer. You
 There is also an information page for the user to find more resources on how to keep your mind and body happy and healthy.
 ## Getting Started
 First you must create a user to be able to login. 
+
 ![alt text](https://github.com/M-tiimi/BLOOM-frontend/tree/main/assets/bloom_login.jpeg?raw=true)
