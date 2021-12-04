@@ -21,3 +21,4 @@ Next you shoul Login with your username and password. It migth take afew minutes
 ![This is an image](https://github.com/M-tiimi/BLOOM-frontend/tree/main/assets/bloom_login.jpeg)
 
 
+![bloom_register](https://user-images.githubusercontent.com/70891200/144714798-ccdaf744-9702-4abb-9a2a-a386123d5ace.jpeg)
