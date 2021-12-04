@@ -13,7 +13,7 @@ The app will ask you daily how are you doing, and prompt you to give answer. You
 There is also an information page for the user to find more resources on how to keep your mind and body happy and healthy.
 ## Getting Started
 ### Set up environment
-Clone BLOOM-frontend repository. Run npm install or yarn install depending wich one you're using. Install expo app on your phone. Make sure your phone is connected to the same network as your computer.
+Clone BLOOM-frontend repository. Run npm install or yarn install depending which one you're using. Install expo app on your phone (App Store or Google Play). Make sure your phone is connected to the same network as your computer. Run expo start and read the QR-code with your phone's camera.
 ### Using Bloom -app
 **First you must create a user to be able to login.** 
 
