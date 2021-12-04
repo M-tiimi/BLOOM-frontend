@@ -15,7 +15,7 @@ There is also an information page for the user to find more resources on how to 
 ### Set up environment
 Clone BLOOM-frontend repository. Run npm install or yarn install depending wich one you're using. Install expo app on your phone. Make sure your phone is connected to the same network as your computer.
 ### Using Bloom -app
-**First you must create a user to be able to login. 
+**First you must create a user to be able to login.** 
 
 ![bloom_register_small](https://user-images.githubusercontent.com/70891200/144714962-74ddc25c-681d-4182-955b-7fcc4912b8cf.jpeg)
 
