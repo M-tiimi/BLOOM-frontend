@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Image, Alert} from "react-native";
 import styles from "./Styles";
 import { signIn, store } from './SigninReducer';
+import { initializeUser, userStore } from "./UserReducer";
 
 export default function Login({ navigation }) {
   const [username, setUsername] = useState("");
@@ -20,8 +21,8 @@ export default function Login({ navigation }) {
       //Then with the data from the response in JSON...
       .then((data) => {
         if (data.token != undefined) {
-          console.log(data);
           //change redux value to true
+          userStore.dispatch(initializeUser(data.user))
           store.dispatch(signIn(true))
         } else {
           store.dispatch(signIn(false))

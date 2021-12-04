@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Text, View, TouchableNativeFeedback, ScrollView, FlatList, Alert, Linking } from 'react-native';
+import { Text, View, TouchableNativeFeedback, ScrollView, FlatList, Alert, Linking, Button } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Dialog from 'react-native-dialog';
 import styles from './Styles.js';
 import LottieView from 'lottie-react-native';
+import { initializeUser, userStore } from './UserReducer.js';
 
 export default function Flower({ navigation }) {
 
@@ -17,12 +18,15 @@ export default function Flower({ navigation }) {
   const [prediction, setPrediction] = useState('');
   const [activities, setActivities] = useState([]);
   const [activity, setActivity] = useState('');
+  const [username, setUsername] = useState('');
 
   const animation = useRef(null);
+ 
 
   const showDialog = () => {
     setVisible(true);
   };
+
 
   const handleCancel = () => {
     setVisible(false);
@@ -84,20 +88,26 @@ export default function Flower({ navigation }) {
 
   //Get user's tasks
   useEffect(() => {
-    fetch(`http://bloom-app.azurewebsites.net/tasks/`)
+    let u = userStore.getState();
+    fetch(`http://bloom-app.azurewebsites.net/task/${u.task[0]}`)
       .then(response => response.json())
       .then(data => {
-        setActivities(data)
+        let list = [];
+        list.push(data);
+        setActivities(list);
+        setPoints(userStore.getState().points);
+        setUsername(userStore.getState().username);
       })
       .catch(e => console.error(e))
   });
 
   // gets question from back and open dialog with input if the time is right
   useEffect(() => {
-    fetch(`https://bloom-app.azurewebsites.net/question/`)
+    let u= userStore.getState().question[0]
+    fetch(`https://bloom-app.azurewebsites.net/question/${u}`)
       .then(response => response.json())
       .then(data => {
-        setQuestion(data[0].title)
+        setQuestion(data.title)
         if (hour <= 23 && hour >= 11) {
           setVisible(true);
         } else {
@@ -135,61 +145,64 @@ export default function Flower({ navigation }) {
     };
   }, [points]);
 
+
+ 
   return (
     <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.dialogContainer}>
-          <Dialog.Container visible={visible}>
-            <Dialog.Description style={{ fontSize: 20 }}>{question}</Dialog.Description>
-            <Dialog.Input
-              onChangeText={text => setAnswer(text)}
-            />
-            <Dialog.Button style={styles.buttonContainer} label='Submit' onPress={() => getPrediction(answer)} />
-            <Dialog.Button style={styles.buttonContainer} label='Cancel' onPress={handleCancel} />
-          </Dialog.Container>
-        </View>
-        <View style={styles.dialogContainer}>
-          <Dialog.Container visible={visible2}>
-            <Dialog.Description style={{ fontSize: 20 }}>Do you want talk?</Dialog.Description>
-            <Dialog.Button style={styles.buttonContainer} label='Yes' onPress={openChat} />
-            <Dialog.Button style={styles.buttonContainer} label='No' onPress={handleCancel2} />
-          </Dialog.Container>
-        </View>
-        <View style={styles.touchContainer}>
-          <Text style={styles.textContainer}>Hello user!</Text>
-          <Text style={styles.textContainer}> Points: {points}</Text>
-          <TouchableNativeFeedback onPress={showDialog}>
-            <View style={styles.iconContainer}>
-              <Text style={{ color: 'white' }}>Show alert</Text>
-            </View>
-          </TouchableNativeFeedback>
-        </View>
-        <View style={styles.flatlistContainer}>
-          <FlatList
-            data={activities}
-            keyExtractor={((item, index) => index.toString())}
-            renderItem={({ item }) =>
-              <View style={styles.touchContainer}>
-                <Text>{item.title}</Text>
-                <AntDesign.Button
-                  backgroundColor="rgb(116, 144, 147)"
-                  onPress={buttonPressed}
-                  name="checkcircleo"
-                  size={24}
-                  color="black" />
-              </View>
-            }
+       <View style={styles.container}>
+      <View style={styles.dialogContainer}>
+        <Dialog.Container visible={visible}>
+          <Dialog.Description style={{ fontSize: 20 }}>{question}</Dialog.Description>
+          <Dialog.Input
+            onChangeText={text => setAnswer(text)}
           />
-        </View>
-        <View style={styles.animationContainer}>
-          <LottieView
-            ref={animation}
-            style={styles.animationStyle}
-            source={require('../assets/flower_animation.json')}
-            loop={false}
-          />
-        </View>
+          <Dialog.Button style={styles.buttonContainer} label='Submit' onPress={() => getPrediction(answer)} />
+          <Dialog.Button style={styles.buttonContainer} label='Cancel' onPress={handleCancel} />
+        </Dialog.Container>
       </View>
+      <View style={styles.dialogContainer}>
+        <Dialog.Container visible={visible2}>
+          <Dialog.Description style={{ fontSize: 20 }}>Do you want talk?</Dialog.Description>
+          <Dialog.Button style={styles.buttonContainer} label='Yes' onPress={openChat} />
+          <Dialog.Button style={styles.buttonContainer} label='No' onPress={handleCancel2} />
+        </Dialog.Container>
+      </View>
+      <View style={styles.touchContainer}>
+        <Text style={styles.textContainer}>Hello {username}</Text>
+        <Text style={styles.textContainer}> Points: {points}</Text>
+        <TouchableNativeFeedback onPress={showDialog}>
+          <View style={styles.iconContainer}>
+            <Text style={{ color: 'white' }}>Show alert</Text>
+          </View>
+        </TouchableNativeFeedback>
+      </View>
+      <View style={styles.flatlistContainer}>
+        <FlatList
+          data={activities}
+          keyExtractor={((item, index) => index.toString())}
+          renderItem={({ item }) =>
+            <View style={styles.touchContainer}>
+              <Text>{item}</Text>
+              <AntDesign.Button
+                backgroundColor="rgb(116, 144, 147)"
+                onPress={buttonPressed}
+                name="checkcircleo"
+                size={24}
+                color="black" />
+            </View>
+          }
+        />
+      </View>
+      <View style={styles.animationContainer}>
+        <LottieView
+          ref={animation}
+          style={styles.animationStyle}
+          source={require('../assets/flower_animation.json')}
+          loop={false}
+        />
+      </View>
+    </View>
+      
     </ScrollView>
   );
 }
