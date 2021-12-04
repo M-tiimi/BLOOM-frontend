@@ -14,4 +14,4 @@ There is also an information page for the user to find more resources on how to 
 ## Getting Started
 First you must create a user to be able to login. 
 
-![alt text](https://github.com/M-tiimi/BLOOM-frontend/tree/main/assets/bloom_login.jpeg?raw=true)
+![This is an image](https://github.com/M-tiimi/BLOOM-frontend/tree/main/assets/bloom_login.jpeg?raw=true)
