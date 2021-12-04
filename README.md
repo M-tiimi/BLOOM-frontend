@@ -18,4 +18,5 @@ First you must create a user to be able to login.
 
 Next you shoul Login with your username and password. It migth take afew minutes before you can login after creating a new user.
 
-![bloom_login](https://user-images.githubusercontent.com/70891200/144714822-ed30eb87-a530-4680-b615-2790af4a0739.jpeg)
+
+![bloom_register_small](https://user-images.githubusercontent.com/70891200/144714962-74ddc25c-681d-4182-955b-7fcc4912b8cf.jpeg)
