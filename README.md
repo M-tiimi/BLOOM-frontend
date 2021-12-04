@@ -11,3 +11,6 @@ brushing your teeth, or eating a proper meal, which when done, gives user points
 The app will ask you daily how are you doing, and prompt you to give answer. You can tell the bot things, and it will follow on how are you doing based on what you write.
 ### Information
 There is also an information page for the user to find more resources on how to keep your mind and body happy and healthy.
+## Getting Started
+First you must create a user to be able to login. 
+![alt text](https://github.com/M-tiimi/BLOOM-frontend/tree/main/assets/bloom_login.jpeg)
