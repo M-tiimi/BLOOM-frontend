@@ -14,4 +14,10 @@ There is also an information page for the user to find more resources on how to 
 ## Getting Started
 First you must create a user to be able to login. 
 
-![This is an image](https://github.com/M-tiimi/BLOOM-frontend/tree/main/assets/image.png)
+![This is an image](https://github.com/M-tiimi/BLOOM-frontend/tree/main/assets/bloom_register.jpeg)
+
+Next you shoul Login with your username and password. It migth take afew minutes before you can login after creating a new user.
+
+![This is an image](https://github.com/M-tiimi/BLOOM-frontend/tree/main/assets/bloom_login.jpeg)
+
+
