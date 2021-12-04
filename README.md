@@ -19,7 +19,7 @@ Clone BLOOM-frontend repository. Run npm install or yarn install depending wich 
 
 ![bloom_register_small](https://user-images.githubusercontent.com/70891200/144714962-74ddc25c-681d-4182-955b-7fcc4912b8cf.jpeg)
 
-**Next you shoul Login with your username and password. It migth take a few minutes before you can login after creating a new user.**
+**Next you should Login with your username and password. It migth take a few minutes before you can login after creating a new user.**
 
 ![bloom_login_small](https://user-images.githubusercontent.com/70891200/144714892-d4b09669-b425-41f8-a0b2-94f94a7f7e79.jpeg)
 
