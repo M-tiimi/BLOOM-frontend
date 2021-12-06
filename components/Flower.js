@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Text, View, TouchableNativeFeedback, ScrollView, FlatList, Alert, Linking, Button } from 'react-native';
+import { Text, View, TouchableNativeFeedback, ScrollView, FlatList, Alert, Linking } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import Dialog from 'react-native-dialog';
 import styles from './Styles.js';
 import LottieView from 'lottie-react-native';
-import { initializeUser, userStore } from './UserReducer.js';
+import { userStore } from './UserReducer.js';
 
+//Main page of the app and the fuctionalities of the flower
 export default function Flower({ navigation }) {
 
   let hour = new Date().getHours();
@@ -17,31 +18,32 @@ export default function Flower({ navigation }) {
   const [visible2, setVisible2] = useState(false);
   const [prediction, setPrediction] = useState('');
   const [activities, setActivities] = useState([]);
-  const [activity, setActivity] = useState('');
   const [username, setUsername] = useState('');
 
   const animation = useRef(null);
  
-
+//Show alert 'tell me about your day' 
   const showDialog = () => {
     setVisible(true);
   };
 
-
+// hide alert 'tell me about your day'
   const handleCancel = () => {
     setVisible(false);
   };
 
+  // show alert 'do you want to talk'
   const showDialog2 = () => {
     setVisible2(true);
   };
 
+  //hide alert 'do you want to talk' and navigate to infromation page
   const handleCancel2 = () => {
     setVisible2(false);
     navigation.navigate('Information');
   };
 
-  // Gives prediction about answer is it good or bad
+  // Uses machine learning API to analyze text sentiment positive or negative 
   const getPrediction = (answer) => {
     setVisible(false);
     const dataToPost = { data: answer };
@@ -54,13 +56,10 @@ export default function Flower({ navigation }) {
       .then(response => response.json())
       .then(data => {
         setPrediction(data.prediction[1])
-        console.log(data.prediction[1]);
-        console.log(answer);
-        console.log(data.prediction)
-        if (prediction === ' data is negative') { //there's a space before data cause it doesnt work otherwise
+        if (prediction === 'data is negative') { 
           showDialog2();
         } else {
-          Alert.alert('nice :)');
+          Alert.alert('That\'s nice to hear');
         }
       })
       .catch(e => console.error(e))
@@ -88,26 +87,25 @@ export default function Flower({ navigation }) {
 
   //Get user's tasks
   useEffect(() => {
-    let u = userStore.getState();
-    fetch(`http://bloom-app.azurewebsites.net/task/${u.task[0]}`)
+    let user_id = userStore.getState().id;
+    fetch(`http://bloom-app.azurewebsites.net/usertasks/${user_id}`)
       .then(response => response.json())
       .then(data => {
-        let list = [];
-        list.push(data);
-        setActivities(list);
+        setActivities(data);
         setPoints(userStore.getState().points);
         setUsername(userStore.getState().username);
       })
       .catch(e => console.error(e))
-  });
+  } );
 
-  // gets question from back and open dialog with input if the time is right
+  // gets question from backend and open dialog with input if the time between 11 and 23
   useEffect(() => {
-    let u= userStore.getState().question[0]
-    fetch(`https://bloom-app.azurewebsites.net/question/${u}`)
+    let user_question= userStore.getState().question[0]
+    fetch(`https://bloom-app.azurewebsites.net/question/${user_question}`)
       .then(response => response.json())
       .then(data => {
         setQuestion(data.title)
+        //Show dialog
         if (hour <= 23 && hour >= 11) {
           setVisible(true);
         } else {
@@ -182,7 +180,7 @@ export default function Flower({ navigation }) {
           keyExtractor={((item, index) => index.toString())}
           renderItem={({ item }) =>
             <View style={styles.touchContainer}>
-              <Text>{item}</Text>
+              <Text>{item.title}</Text>
               <AntDesign.Button
                 backgroundColor="rgb(116, 144, 147)"
                 onPress={buttonPressed}

@@ -3,6 +3,7 @@ import React from 'react';
 import { Text, View, Button, Linking } from 'react-native';
 import styles from './Styles';
 
+//information and links to mental health resources
 export default function Information() {
 
     return (

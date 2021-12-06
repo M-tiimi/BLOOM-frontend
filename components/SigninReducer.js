@@ -16,7 +16,7 @@ export function changeSignInValue(state, action) {
     if (action.type == 'signIn') {
         return action.valueOfState
     } else {
-        return state == false
+        return state = false
     }
 }
 
