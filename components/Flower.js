@@ -67,7 +67,7 @@ export default function Flower({ navigation }) {
 
   // activity button pressed and points increase by two
   const buttonPressed = () => {
-    setPoints(points => points + 2)
+    setPoints(points => points + 2);
   }
 
   // last animation frames
@@ -85,6 +85,17 @@ export default function Flower({ navigation }) {
     setVisible2(false);
   }
 
+  //Get user's points
+  useEffect(() => {
+    let user_id = userStore.getState().id;
+    fetch(`http://bloom-app.azurewebsites.net/usertasks/${user_id}`)
+      .then(response => response.json())
+      .then(_ => {
+        setPoints(userStore.getState().points);
+      })
+      .catch(e => console.error(e))
+  }, []);
+
   //Get user's tasks
   useEffect(() => {
     let user_id = userStore.getState().id;
@@ -92,11 +103,11 @@ export default function Flower({ navigation }) {
       .then(response => response.json())
       .then(data => {
         setActivities(data);
-        setPoints(userStore.getState().points);
         setUsername(userStore.getState().username);
       })
       .catch(e => console.error(e))
-  } );
+  });
+
 
   // gets question from backend and open dialog with input if the time between 11 and 23
   useEffect(() => {
