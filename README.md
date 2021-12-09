@@ -30,6 +30,6 @@ Clone BLOOM-frontend repository. Run npm install or yarn install depending which
 
 **In the add task page you can add tasks**
 
-**Growing the flower happends through doing the tasks and collecting points. Doing a task rewards you with 2 points, and the flower will grow when you have more than 6 points, and grows more when you have more than 10 points. If you don't do any tasks, the points will start to decrease after a certain time**
+**Growing the flower happens through doing the tasks and collecting points. Doing a task rewards you with 2 points, and the flower will grow when you have more than 6 points, and grows more when you have more than 10 points. If you don't do any tasks, the points will start to decrease after a certain time**
 
 **From the information tab you can find resources on how to better your mental health, and links to instructions on how to make an appointment with mental health professional if you have the need for it.**
