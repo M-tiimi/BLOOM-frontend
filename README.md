@@ -8,7 +8,7 @@ In this project, the idea is to create an app ment for aiding user in taking car
 The main idea is to take care of a flower which will grow when user is taking care of themselfes, and starts to die when not. The user can add tasks, for example
 brushing your teeth, or eating a proper meal, which when done, gives user points which grow the flower.
 ### Machine learning
-The app will ask you daily how are you doing, and prompt you to give answer. You can tell the bot things, and it will suggest actions based on what kinda input you give it.
+The app will ask you daily how are you doing, and prompt you to give an answer. You can tell the app things, and it will suggest actions based on what kinda input you give it.
 ### Information
 There is also an information page for the user to find more resources on how to keep your mind and body happy and healthy.
 ## Built with
