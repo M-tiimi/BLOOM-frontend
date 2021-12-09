@@ -26,7 +26,7 @@ Clone BLOOM-frontend repository. Run npm install or yarn install depending which
 
 ![bloom_login_small](https://user-images.githubusercontent.com/70891200/144714892-d4b09669-b425-41f8-a0b2-94f94a7f7e79.jpeg)
 
-**The app opens to the flower tab, from there you can see the condition of your flower, your tasks and then there's also a button for showing alert. When pressing Show alert button a dialog box opens, and the app asks you "Tell me about your day" and you can send and answer. The app will react in a certain way based on what you answer. If the user input is negative, the app will ask "Do you want to talk?", if you press yes, you are redirected to sekasin24/7 chat where you can talk to a real human, if you press no, you are redirected to the information page of the app. If the user input is positive alert showing "thats nice to hear :)" is shown.**
+**The app opens to the flower tab, from there you can see the condition of your flower, your tasks and then there's also a button for showing alert. When pressing Show alert button a dialog box opens, and the app asks you "Tell me about your day" and you can send and answer. The app will react in a certain way based on what you answer. If the user input is negative, the app will ask "Do you want to talk?", if you press yes, you are redirected to sekasin24/7 chat where you can talk to a real human, if you press no, you are redirected to the information page of the app. If the user input is positive alert showing "thats nice to hear" is shown.**
 
 **In the add task page you can add tasks**
 
